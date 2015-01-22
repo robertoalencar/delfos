@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/WEB-INF/templates/template.xhtml">
+	<ui:define name="conteudo">
+	
+		<h:form id="form">
+		
+			<p:panel>
+				<h:outputText value="Usuário" class="textoBreadCrumb" />
+			</p:panel>
+		
+			<p:messages id="messages" />
+		
+			<p:accordionPanel activeIndex="1">  
+ 				<p:tab title="Filtros de Pesquisa">
+					<h:panelGrid id="filtro" columns="2" cellspacing="10">
+
+						<h:outputLabel for="codigo" value="Código " />
+					    <p:inputText value="#{usuarioController.usuario.chavePrimaria}" size="10" />
+
+						<h:outputLabel for="nome" value="Nome " />
+					    <p:inputText value="#{usuarioController.usuario.nome}" size="70">
+					    	<p:ajax event="keyup" update=":form:lista, :form:totalRegistros"  listener="#{usuarioController.pesquisar}" />
+					    </p:inputText>
+					    
+					    <h:outputLabel for="empresa" value="Empresa " />
+						<p:selectOneMenu id="empresa" value="#{usuarioController.usuario.empresa}" converter="empresaConverter">
+							<f:selectItem itemLabel=" -- Selecione a empresa -- " itemValue="" />
+							<f:selectItems value="#{usuarioController.listaEmpresa}" />
+						</p:selectOneMenu>
+					    
+					    <h:outputText for="setor" value="Setor " />
+						<p:selectOneMenu id="setor" value="#{usuarioController.usuario.setor}" converter="setorConverter">
+							<f:selectItem itemLabel=" -- Selecione -- " itemValue="" />
+							<f:selectItems value="#{usuarioController.listaSetor}" />
+						</p:selectOneMenu>
+						
+						<h:outputText for="cargo" value="Cargo " />
+						<p:selectOneMenu id="cargo" value="#{usuarioController.usuario.cargo}" converter="cargoConverter">
+							<f:selectItem itemLabel=" -- Selecione -- " itemValue="" />
+							<f:selectItems value="#{usuarioController.listaCargo}" />
+						</p:selectOneMenu>
+						
+					    <h:outputLabel value="" />
+					    <h:outputLabel value="" />
+					    
+					    <h:outputLabel value="" />
+					    <h:panelGroup>
+					    	<p:commandButton id="btLimpar" value="Limpar" update="filtro, :form:lista, :form:totalRegistros" action="#{usuarioController.limparPesquisa}" icon="ui-icon-arrow-1-w" /> &nbsp;&nbsp;
+							<p:commandButton id="btPesquisar" value="Pesquisar" update="filtro, :form:lista, :form:totalRegistros" action="#{usuarioController.pesquisar}" icon="ui-icon-search" />
+						</h:panelGroup>
+					</h:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
+   				
+			<p:panel id="listagem" header="Listagem de Usuário " style="margin-bottom:10px;">
+			
+				<h:panelGrid cellspacing="5" cellpadding="5" width="100%" columnClasses="colunaBotoesDireita">
+					<p:commandButton id="btNovo" value="Novo" action="salvarUsuario" ajax="false" icon="ui-icon-contact" />
+				</h:panelGrid>
+	    				
+				<p:dataTable id="lista" value="#{usuarioController.listaUsuario}" var="obj" rowKey="#{obj.chavePrimaria}" 
+					paginator="true" paginatorPosition="bottom" rows="10" rowsPerPageTemplate="10,25,50,10000000" emptyMessage="Nenhum registro cadastrado."
+					selection="#{usuarioController.usuarioSelecionado}" selectionMode="single">
+	
+					<p:ajax event="rowSelect" update=":form:display, :form:display2, :form:display3, :form:confirmaExclusao" oncomplete="itemDialog.show()" /> 
+	
+					<p:column headerText="Código" style="width:10%; text-align: center;" sortBy="#{obj.chavePrimaria}">
+			            <h:outputText value="#{obj.chavePrimaria}" />  
+			        </p:column>
+			        <p:column headerText="Nome" style="width:30%;" sortBy="#{obj.nome}">
+			            <h:outputText value="#{obj.nome}" />  
+			        </p:column>
+			        <p:column headerText="Ramal" style="width:10%; text-align: center;" sortBy="#{obj.contato.foneComercial}">
+			            <h:outputText value="#{obj.contato.foneComercial}" />  
+			        </p:column>
+			        <p:column headerText="Celular" style="width:10%; text-align: center;" sortBy="#{obj.contato.foneCelular}">
+			            <h:outputText value="#{obj.contato.foneCelular}" />  
+			        </p:column>
+			        <p:column headerText="E-mail Principal" style="width:20%;" sortBy="#{obj.contato.emailPrincipal}">
+			            <h:outputText value="#{obj.contato.emailPrincipal}" />  
+			        </p:column>
+			        <p:column headerText="Setor" style="width:10%; text-align: center;" sortBy="#{obj.setor.descricao}">
+			            <h:outputText value="#{obj.setor.descricao}" />  
+			        </p:column>
+			        <p:column headerText="Cargo" style="width:10%; text-align: center;" sortBy="#{obj.cargo.descricao}">
+			            <h:outputText value="#{obj.cargo.descricao}" />  
+			        </p:column>
+			    </p:dataTable>
+			    
+			    <h:outputText id="totalRegistros" value="Total Listados: #{usuarioController.listaUsuario.size()}" class="textoExemplo" />
+			    
+			    <p:dialog header="Detalhe Usuário" modal="true" appendToBody="true" width="1000" height="500" widgetVar="itemDialog">
+			         <h:panelGrid id="display" columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">  
+			            <h:outputLabel value="Nome: " />
+			            <h:outputText value="#{usuarioController.usuarioSelecionado.nome}" />
+			            
+			            <h:outputLabel value="Login: " />
+			            <h:outputText value="#{usuarioController.usuarioSelecionado.login}" />
+			            
+			            <h:outputLabel value="Telefones: " />
+			            <h:panelGroup>
+			            	<h:outputText value="#{usuarioController.usuarioSelecionado.contato.fonePessoal}" />&nbsp;<h:outputText value="-" rendered="#{usuarioController.usuarioSelecionado.contato.foneComercial != null}" />&nbsp;
+			            	<h:outputText value="#{usuarioController.usuarioSelecionado.contato.foneComercial}" />&nbsp;<h:outputText value="-" rendered="#{usuarioController.usuarioSelecionado.contato.foneCelular != null}" />&nbsp;
+			            	<h:outputText value="#{usuarioController.usuarioSelecionado.contato.foneCelular}" />&nbsp;<h:outputText value="-" rendered="#{usuarioController.usuarioSelecionado.contato.foneOutros != null}" />&nbsp;
+			            	<h:outputText value="#{usuarioController.usuarioSelecionado.contato.foneOutros}" />
+			            </h:panelGroup>
+			            
+			            <h:outputLabel value="E-mails: " />
+			            <h:panelGroup>
+		            		<h:outputText value="#{usuarioController.usuarioSelecionado.contato.emailPrincipal}" />&nbsp;<h:outputText value="; " rendered="#{usuarioController.usuarioSelecionado.contato.emailSecundario != null}" />&nbsp;<h:outputText value="#{usuarioController.usuarioSelecionado.contato.emailSecundario}" />
+		            	</h:panelGroup>
+		            	
+						<h:outputLabel value="Data Nascimento: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.dataNascimento}">
+		            		<f:convertDateTime pattern="dd/MM/yyyy" />
+		            	</h:outputText>
+		            			            
+		            </h:panelGrid>
+					
+						<p:separator style="width: 100%; height: 5px" />
+							
+					<h:panelGrid id="display2" columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+					
+		            	<h:outputLabel value="Rua: " />
+		            	<h:panelGroup>
+		            		<h:outputText value="#{usuarioController.usuarioSelecionado.endereco.rua}" />&nbsp;<h:outputText value=", N° " rendered="#{usuarioController.usuarioSelecionado.endereco.numero != null}" />&nbsp;<h:outputText value="#{usuarioController.usuarioSelecionado.endereco.numero}" />
+		            	</h:panelGroup>
+		            	
+		            	<h:outputLabel value="Complemento: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.endereco.complemento}" />
+		            	
+		            	<h:outputLabel value="Bairro: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.endereco.bairro}" />
+		            	
+		            	<h:outputLabel value="CEP: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.endereco.cep}" />
+		            	
+		            	<h:outputLabel value="Estado: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.endereco.cidade.estado.sigla}" />
+		            	
+		            	<h:outputLabel value="Cidade: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.endereco.cidade.nome}" />
+		            	
+					</h:panelGrid>
+					
+						<p:separator style="width: 100%; height: 5px" />
+
+					<h:panelGrid id="display3" columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+
+						<h:outputLabel value="Empresa: " />
+			            <h:outputText value="#{usuarioController.usuarioSelecionado.empresa.nomeFantasia}" />
+		            	
+		            	<h:outputLabel value="Setor: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.setor.descricao}" />
+		            	
+		            	<h:outputLabel value="Cargo: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.cargo.descricao}" />
+		            	
+		            	<h:outputLabel value="Data Admissão: " />
+		            	<h:outputText value="#{usuarioController.usuarioSelecionado.dataAdmissao}">
+		            		<f:convertDateTime pattern="dd/MM/yyyy" />
+		            	</h:outputText>
+		            	
+			        </h:panelGrid>
+			        <br />
+			        <p:separator style="width: 100%; height: 5px" />
+			        <br />
+					<h:panelGrid id="botoesEdicao" columns="2" cellspacing="10" cellpadding="10" width="100%" columnClasses="colunaBotoesEsquerda, colunaBotoesDireita">
+						<h:panelGroup>
+							<p:commandButton id="btEditar" value="Editar" action="#{usuarioController.exibirTelaAtualizacao}" icon="ui-icon-pencil" />&nbsp;&nbsp;
+							<p:commandButton id="btRemover" value="Remover" onclick="itemDialogExclusao.show();" icon="ui-icon-trash"/>
+						</h:panelGroup>
+						<p:commandButton id="btFechar" value="Fechar" onclick="itemDialog.hide();" update="messages,lista" icon="ui-icon-close" />
+					</h:panelGrid>
+			    </p:dialog>
+			    
+			    <p:dialog header="Confirmação de Exclusão" modal="true" appendToBody="true" width="1000" widgetVar="itemDialogExclusao">
+					<h:panelGrid id="confirmaExclusao" cellspacing="10" cellpadding="10" width="100%" style="text-align: center;">
+						<h:panelGroup>
+							<h:outputText value="Tem certeza que deseja remover [ #{usuarioController.usuarioSelecionado.nome} ] do sistema ?" />&nbsp;&nbsp;
+							<p:commandButton id="btConfirmaExclusao" value="Sim" action="#{usuarioController.removerUsuario}" update="messages,lista" oncomplete="itemDialogExclusao.hide(); itemDialog.hide()" process="@this" icon="ui-icon-check" />&nbsp;&nbsp;
+				        	<p:commandButton id="btRejeitaExclusao" value="Não" onclick="itemDialogExclusao.hide();" update="messages,lista" icon="ui-icon-close" />
+						</h:panelGroup>
+					</h:panelGrid>
+			    </p:dialog>
+			</p:panel>
+
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+
+</html>

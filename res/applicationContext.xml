@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="propertyConfigurerInternal" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	    <property name="location">
+	        <value>classpath:/jdbc.properties</value>
+	    </property>
+	</bean>
+
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		
+		<property name="annotatedClasses">
+			<list>
+				<value>br.com.tidius.delfos.model.comum.negocio.Tenant</value>
+				<value>br.com.tidius.delfos.model.comum.endereco.Estado</value>
+				<value>br.com.tidius.delfos.model.comum.endereco.Cidade</value>
+				<value>br.com.tidius.delfos.model.usuario.Setor</value>
+				<value>br.com.tidius.delfos.model.usuario.Cargo</value>
+				<value>br.com.tidius.delfos.model.usuario.Usuario</value>
+				<value>br.com.tidius.delfos.model.usuario.UsuarioContato</value>
+				<value>br.com.tidius.delfos.model.usuario.UsuarioEndereco</value>
+				<value>br.com.tidius.delfos.model.empresa.Empresa</value>
+				<value>br.com.tidius.delfos.model.empresa.EmpresaContato</value>
+				<value>br.com.tidius.delfos.model.empresa.EmpresaEndereco</value>
+			</list>
+		</property>
+		 
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+
+ 	<!-- Classes de Domínio -->
+ 	
+ 	<bean id="endereco" class="br.com.tidius.delfos.model.comum.endereco.Endereco" singleton="false" />
+ 	<bean id="estado" class="br.com.tidius.delfos.model.comum.endereco.Estado" singleton="false" />
+ 	<bean id="cidade" class="br.com.tidius.delfos.model.comum.endereco.Cidade" singleton="false" />
+	<bean id="setor" class="br.com.tidius.delfos.model.usuario.Setor" singleton="false" />
+	<bean id="cargo" class="br.com.tidius.delfos.model.usuario.Cargo" singleton="false" />
+	<bean id="usuario" class="br.com.tidius.delfos.model.usuario.Usuario" singleton="false" />
+	<bean id="usuarioContato" class="br.com.tidius.delfos.model.usuario.UsuarioContato" singleton="false" />
+	<bean id="usuarioEmpresa" class="br.com.tidius.delfos.model.usuario.UsuarioEmpresa" singleton="false" />
+	<bean id="usuarioEndereco" class="br.com.tidius.delfos.model.usuario.UsuarioEndereco" singleton="false" />
+	<bean id="empresa" class="br.com.tidius.delfos.model.empresa.Empresa" singleton="false" />
+	<bean id="empresaContato" class="br.com.tidius.delfos.model.empresa.EmpresaContato" singleton="false" />
+	<bean id="empresaEndereco" class="br.com.tidius.delfos.model.empresa.EmpresaEndereco" singleton="false" />
+	
+	
+	<!-- Services -->
+	
+	<bean id="cargoService" class="br.com.tidius.delfos.model.usuario.CargoService" singleton="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+	<bean id="setorService" class="br.com.tidius.delfos.model.usuario.SetorService" singleton="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+	<bean id="usuarioService" class="br.com.tidius.delfos.model.usuario.UsuarioService" singleton="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+	<bean id="empresaService" class="br.com.tidius.delfos.model.empresa.EmpresaService" singleton="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+	<bean id="enderecoService" class="br.com.tidius.delfos.model.comum.endereco.EnderecoService" singleton="true">
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
+	</bean>
+
+</beans>

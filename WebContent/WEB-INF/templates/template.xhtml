@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+
+	<f:loadBundle var="msgs" basename="messages"/>
+
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>TIDIUS TECNOLOGIA</title>
+		</f:facet>
+		
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+		<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/tidius.css" />
+
+	</h:head>
+
+	<h:body>
+		<p:layout fullPage="true">
+			<p:layoutUnit id="top" position="north" size="60" styleClass="containerNorth">
+				<h:form>
+					<p:growl id="messages" />
+					<h:panelGrid columns="2" columnClasses="colunaBotoesEsquerda, colunaBotoesDireita" style="width: 100%">
+						<h:panelGroup>
+							<p:menubar styleClass="semBordas" rendered="#{usuarioLogado != null}">
+								<p:submenu label=" Sistema " icon="ui-icon-document">
+									<p:menuitem value="Home" url="/view/home/home.xhtml" />
+									<p:separator />
+									<p:menuitem value="Usuário" url="/view/usuario/pesquisarUsuario.xhtml" />
+									<p:separator />
+									<p:menuitem value="Sair" action="#{loginController.logout}" />
+								</p:submenu>
+								<p:submenu label="Empresa" icon="ui-icon-document">
+									<p:menuitem value="Setor" url="/view/setor/pesquisarSetor.xhtml" />
+									<p:menuitem value="Cargo" url="/view/cargo/pesquisarCargo.xhtml" />
+									<p:menuitem value="Empresa" url="/view/empresa/pesquisarEmpresa.xhtml" />
+								</p:submenu>
+							</p:menubar>
+						
+						</h:panelGroup>
+						<h:panelGroup>
+							<p:commandButton id="btInscrevase" value="INSCREVA-SE" action="#" ajax="false" immediate="true" rendered="#{usuarioLogado == null}" style="background: #009900; color: #ffffff; " />&nbsp;&nbsp;&nbsp;
+							<h:graphicImage id="logo" url="/imagens/logo-tidius.png" alt="TIDIUS TECNOLOGIA" />
+							&nbsp;&nbsp;&nbsp;
+						</h:panelGroup>
+					</h:panelGrid>
+					
+				</h:form>
+			</p:layoutUnit>
+
+			<p:layoutUnit id="center" position="center">
+				<ui:insert id="conteudo" name="conteudo" />
+			</p:layoutUnit>
+
+			<p:layoutUnit id="bottom" position="south" size="30" styleClass="containerSouth">
+				<h:form>
+					<h:panelGrid columns="2" width="100%" columnClasses="colunaBotoesEsquerda, colunaBotoesDireita">
+						<h:panelGroup>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<h:outputText value="© 2013 - TIDIUS TECNOLOGIA" styleClass="textoRodape" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<p:commandLink value="Termos de Serviço" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<p:commandLink value="Política de Privacidade" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<p:commandLink value="Ajuda" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</h:panelGroup>
+						<h:panelGroup styleClass="textoRodape">
+							<h:outputText value="Versão 0.0.1" />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</h:panelGroup>
+					</h:panelGrid>
+				</h:form>
+			</p:layoutUnit>
+
+		</p:layout>
+	</h:body>
+
+</f:view>
+</html>

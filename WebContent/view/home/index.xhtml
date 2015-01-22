@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="/WEB-INF/templates/template.xhtml">
+		<ui:define name="conteudo">
+			<h:form >
+				<br /><br /><br /><br /><br />
+				<center>
+					<h:panelGrid columns="2" cellpadding="10" style="width: 70%; " columnClasses="indexColunaEsquerda, indexColunaDireita">
+						
+						<h:graphicImage id="logo" url="/imagens/logo-delfos.gif"/>
+												
+						<p:panel header="Informe o login e senha para entrar no sistema" id="loginPanel" styleClass="loginPanel" footer="">
+							<p:messages id="messages" />	
+							<h:panelGrid columns="2" cellpadding="4">
+								<h:outputLabel for="login" value="Login " />
+								<h:outputText value="" />
+								
+								<p:inputText id="login" value="#{loginController.login}" size="50" label="Login" required="true" maxlength="50" />
+								<h:outputText value="" />
+								
+								<h:outputText for="senha" value="Senha " />
+								<h:outputText value="" />
+								
+		           				<p:password id="senha" value="#{loginController.senha}" size="50" redisplay="true" label="Senha" required="true" maxlength="50" />
+		           				<h:outputText value="" />
+		           			</h:panelGrid>
+		           			<br />
+		           			<h:panelGrid cellpadding="4" styleClass="textoRodape">
+		           				<h:panelGroup>
+			           				<p:commandButton id="btLogin" value="Login" action="#{loginController.login}" ajax="false" style="width: 110px" />
+		           					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		           					<p:selectBooleanCheckbox value="#{loginController.continuarConectado}" />&nbsp;&nbsp;&nbsp;&nbsp;<h:outputText value="Continuar conectado" />
+		           				</h:panelGroup>
+							</h:panelGrid>
+							<br />
+							<h:panelGrid cellpadding="4">
+								<p:commandLink value="Esqueçeu sua senha?" />
+							</h:panelGrid>
+						</p:panel>
+					</h:panelGrid>
+					
+				</center>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+
+</html>

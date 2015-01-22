@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form>
+		
+			<p:panel>
+				<h:outputText value="Empresa &nbsp; - &nbsp; Salvar" class="textoBreadCrumb" />
+			</p:panel>
+		
+			<p:panel id="panel" header="Informe os campos abaixo para salvar o registro ( * Obrigatórios ): " style="margin-bottom:10px;">
+
+				<p:messages id="messages" />
+
+				<p:accordionPanel multiple="true" activeIndex="0">  
+   					<p:tab title="Informações Básicas">
+   						<h:panelGrid id="informacoesBasicas" columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+
+							<h:panelGroup><h:outputLabel for="nomeFantasia" value="Nome Fantasia " /><h:outputText value="*" /></h:panelGroup>
+							<p:inputText id="nomeFantasia" value="#{empresaController.empresa.nomeFantasia}" size="70" label="Nome Fantasia" maxlength="100" required="true" />
+
+							<h:outputLabel for="razaoSocial" value="Razão Social " />
+							<p:inputText id="razaoSocial" value="#{empresaController.empresa.razaoSocial}" size="70" label="Razão Social" maxlength="100" />
+							
+							<h:outputLabel for="cnpj" value="CNPJ " />
+							<p:inputText id="cnpj" value="#{empresaController.empresa.cnpj}" label="CNPJ" />
+							
+							<h:outputLabel for="inscricaoEstadual" value="Inscrição Estadual " />
+							<p:inputText id="inscricaoEstadual" value="#{empresaController.empresa.inscricaoEstadual}" label="Inscrição Estadual" />
+							
+   						</h:panelGrid>
+   					</p:tab>
+   					<p:tab title="Informações de Contato">
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+							<h:outputLabel for="fonePessoal" value="Telefone " />
+							<h:panelGroup>
+								&nbsp;<h:outputLabel for="fonePessoal" value="Pessoal " />&nbsp;
+								<p:inputMask id="fonePessoal" value="#{empresaController.empresa.contato.fonePessoal}" size="15" mask="(99) 9999.9999" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="foneComercial" value="Comercial " />&nbsp;
+								<p:inputMask id="foneComercial" value="#{empresaController.empresa.contato.foneComercial}" size="15" mask="(99) 9999.9999" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="foneCelular" value="Celular " />&nbsp;
+								<p:inputMask id="foneCelular" value="#{empresaController.empresa.contato.foneCelular}" size="15" mask="(99) 9999.9999" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="foneOutros" value="Outros " />&nbsp;
+								<p:inputMask id="foneOutros" value="#{empresaController.empresa.contato.foneOutros}" size="15" mask="(99) 9999.9999" maxlength="45" />
+							</h:panelGroup>
+							<h:outputLabel for="emailPrincipal" value="E-mail " />
+							<h:panelGroup>
+								<h:outputLabel for="emailPrincipal" value="Principal " />&nbsp;
+								<p:inputText id="emailPrincipal" value="#{empresaController.empresa.contato.emailPrincipal}" size="35" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="emailSecundario" value="Secundário " />&nbsp;
+								<p:inputText id="emailSecundario" value="#{empresaController.empresa.contato.emailSecundario}" size="35" maxlength="45" />
+							</h:panelGroup>
+   						</h:panelGrid>
+   					</p:tab>
+   					<p:tab title="Informações de Endereço">
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+   							<h:outputLabel for="endereco" value="Endereço " />
+   							<h:panelGroup>
+								<p:inputText id="endereco" value="#{empresaController.rua}" size="70" maxlength="50" />
+								&nbsp;&nbsp;
+								<h:outputLabel for="numero" value="N° " />&nbsp;
+								<p:inputText id="numero" value="#{empresaController.numero}" size="5" maxlength="10" />
+								&nbsp;&nbsp;
+							</h:panelGroup>
+							
+							<h:outputLabel for="complemento" value="Complemento " />
+							<h:panelGroup>
+								<p:inputText id="complemento" value="#{empresaController.complemento}" size="70" maxlength="100" />
+								&nbsp;&nbsp;
+								<h:outputLabel for="bairro" value="Bairro " />&nbsp;
+								<p:inputText id="bairro" value="#{empresaController.bairro}" maxlength="50" />
+							</h:panelGroup>
+							
+							<h:outputLabel for="cep" value="CEP " />
+							<p:inputMask id="cep" value="#{empresaController.cep}" size="15" mask="99.999-999" maxlength="10" />
+
+							<h:outputLabel for="uf" value="UF: " />
+							<p:selectOneMenu id="uf" value="#{empresaController.estado}" converter="estadoConverter">
+								<f:selectItem itemLabel=" -- Selecione -- " itemValue="" />    
+								<f:selectItems value="#{empresaController.listaEstado}" />
+								<p:ajax update="cidade" listener="#{empresaController.carregaCidadesPorEstado}" />
+							</p:selectOneMenu>
+							
+							<h:outputLabel for="cidade" value="Cidade: " />
+							<p:selectOneMenu id="cidade" value="#{empresaController.cidade}" converter="cidadeConverter">
+								<f:selectItem itemLabel="" itemValue="" />
+								<f:selectItems value="#{empresaController.listaCidade}" />
+							</p:selectOneMenu>	
+						</h:panelGrid>
+   					</p:tab>
+   					<p:tab title="Informações Adicionais">
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+							<h:outputLabel for="homePage" value="Home Page " />
+							<p:inputText id="homePage" value="#{empresaController.empresa.homePage}" size="70" label="Razão Social" maxlength="100" />
+
+							<h:outputLabel for="dadosAdicionais" value="Dados Adicionais " />
+							<p:inputTextarea id="dadosAdicionais" rows="10" cols="100" counter="counter" maxlength="10" counterTemplate="{0} characters remaining." autoResize="false" value="#{empresaController.empresa.dadosAdicionais}" /> 
+   						</h:panelGrid>
+   					</p:tab>
+   				</p:accordionPanel>
+   				<h:panelGrid id="botoesEdicao" columns="2" cellspacing="10" cellpadding="10" width="100%" columnClasses="colunaBotoesEsquerda, colunaBotoesDireita">
+					<h:panelGroup>
+						<p:commandButton id="btSalvar" value="Salvar" action="#{empresaController.salvar}" update="panel" ajax="false" icon="ui-icon-play" />&nbsp;&nbsp; 
+						<p:commandButton id="btSalvarPesquisar" value="Salvar e Pesquisar" action="#{empresaController.salvarPesquisar}" update="panel" ajax="false" icon="ui-icon-seek-next" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:commandButton id="btLimpar" value="Limpar" update="panel" action="#{empresaController.limparCadastro}" icon="ui-icon-arrow-1-w" />&nbsp;&nbsp;
+						<p:commandButton id="btCancelar" value="Cancelar" action="#{empresaController.cancelar}" icon="ui-icon-stop" ajax="false" immediate="true" />
+					</h:panelGroup>
+				</h:panelGrid>
+			</p:panel>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

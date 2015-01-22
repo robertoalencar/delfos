@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/WEB-INF/templates/template.xhtml">
+	<ui:define name="conteudo">
+	
+		<h:form id="form">
+		
+			<p:panel>
+				<h:outputText value="Setor" class="textoBreadCrumb" />
+			</p:panel>
+		
+			<p:messages id="messages" />
+		
+			<p:accordionPanel activeIndex="1">  
+ 				<p:tab title="Filtros de Pesquisa">
+					<h:panelGrid id="filtro" columns="2" cellspacing="10">
+
+						<h:outputLabel for="codigo" value="Código " />
+					    <p:inputText value="#{setorController.setor.chavePrimaria}" size="10" />
+					    
+						<h:outputLabel for="descricao" value="Descrição " />
+					    <p:inputText value="#{setorController.setor.descricao}" size="70">
+					    	<p:ajax event="keyup" update=":form:lista, :form:totalRegistros"  listener="#{setorController.pesquisar}" />
+					    </p:inputText>
+					    
+					    <h:outputLabel value="" />
+					    <h:outputLabel value="" />
+					    
+					    <h:outputLabel value="" />
+					    <h:panelGroup>
+					    	<p:commandButton id="btLimpar" value="Limpar" update="filtro, :form:lista, :form:totalRegistros" action="#{setorController.limparPesquisa}" icon="ui-icon-arrow-1-w" /> &nbsp;&nbsp;
+							<p:commandButton id="btPesquisar" value="Pesquisar" update="filtro, :form:lista, :form:totalRegistros" action="#{setorController.pesquisar}" icon="ui-icon-search" />
+						</h:panelGroup>
+					</h:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
+   			<p:panel id="listagem" header="Listagem de Setor " style="margin-bottom:10px;">
+			
+				<h:panelGrid cellspacing="5" cellpadding="5" width="100%" columnClasses="colunaBotoesDireita">
+					<p:commandButton id="btNovo" value="Novo" action="salvarSetor" ajax="false" icon="ui-icon-contact" />
+				</h:panelGrid>
+	    				
+				<p:dataTable id="lista" value="#{setorController.listaSetor}" var="obj" rowKey="#{obj.chavePrimaria}" 
+					paginator="true" paginatorPosition="bottom" rows="10" rowsPerPageTemplate="10,25,50,10000000" emptyMessage="Nenhum registro cadastrado."
+					selection="#{setorController.setorSelecionado}" selectionMode="single">
+	
+					<p:ajax event="rowSelect" update=":form:display, :form:confirmaExclusao" oncomplete="itemDialog.show()" />
+	
+					<p:column headerText="Código" style="width:10%; text-align: center;" sortBy="#{obj.chavePrimaria}">
+			            <h:outputText value="#{obj.chavePrimaria}" />  
+			        </p:column>
+			        <p:column headerText="Descrição" style="width:90%;" sortBy="#{obj.descricao}">
+			            <h:outputText value="#{obj.descricao}" />  
+			        </p:column>
+			    </p:dataTable>
+			    
+			    <h:outputText id="totalRegistros" value="Total Listados: #{setorController.listaSetor.size()}" class="textoExemplo" />
+			    
+			    <p:dialog header="Detalhe Setor" modal="true" appendToBody="true" width="1000" widgetVar="itemDialog">
+			         <h:panelGrid id="display" columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">  
+			            <h:outputLabel value="Descrição: " />
+			            <h:outputText value="#{setorController.setorSelecionado.descricao}" />
+			        </h:panelGrid>
+			        <br />
+					<h:panelGrid id="botoesEdicao" columns="2" cellspacing="10" cellpadding="10" width="100%" columnClasses="colunaBotoesEsquerda, colunaBotoesDireita">
+						<h:panelGroup>
+							<p:commandButton id="btEditar" value="Editar" action="#{setorController.exibirTelaAtualizacao}" icon="ui-icon-pencil" />&nbsp;&nbsp;
+							<p:commandButton id="btRemover" value="Remover" onclick="itemDialogExclusao.show();" icon="ui-icon-trash"/>
+						</h:panelGroup>
+						<p:commandButton id="btFechar" value="Fechar" onclick="itemDialog.hide();" update="messages,lista" icon="ui-icon-close" />
+					</h:panelGrid>
+			    </p:dialog>
+			    
+			    <p:dialog header="Confirmação de Exclusão" modal="true" appendToBody="true" width="1000" widgetVar="itemDialogExclusao">
+					<h:panelGrid id="confirmaExclusao" cellspacing="10" cellpadding="10" width="100%" style="text-align: center;">
+						<h:panelGroup>
+							<h:outputText value="Tem certeza que deseja remover [ #{setorController.setorSelecionado.descricao} ] do sistema ?" />&nbsp;&nbsp;
+							<p:commandButton id="btConfirmaExclusao" value="Sim" action="#{setorController.removerSetor}" update="messages,lista" oncomplete="itemDialogExclusao.hide(); itemDialog.hide()" process="@this" icon="ui-icon-check" />&nbsp;&nbsp;
+				        	<p:commandButton id="btRejeitaExclusao" value="Não" onclick="itemDialogExclusao.hide();" update="messages,lista" icon="ui-icon-close" />
+						</h:panelGroup>
+					</h:panelGrid>
+			    </p:dialog>
+			</p:panel>
+
+		</h:form>
+		
+	</ui:define>
+</ui:composition>
+
+</html>

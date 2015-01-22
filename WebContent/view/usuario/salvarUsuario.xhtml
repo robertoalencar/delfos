@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form>
+		
+			<p:panel>
+				<h:outputText value="Usuário &nbsp; - &nbsp; Salvar" class="textoBreadCrumb" />
+			</p:panel>
+		
+			<p:panel id="panel" header="Informe os campos abaixo para salvar o registro ( * Obrigatórios ): " style="margin-bottom:10px;">
+
+				<p:messages id="messages" />
+
+				<p:accordionPanel multiple="true" activeIndex="0">  
+   					<p:tab title="Informações Básicas">
+   						<h:panelGrid id="informacoesBasicas" columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+   						
+   							<h:panelGroup><h:outputLabel for="empresa" value="Empresa " /><h:outputText value="*" /></h:panelGroup>
+							<p:selectOneMenu id="empresa" value="#{usuarioController.usuario.empresa}" converter="empresaConverter" label="Empresa" required="true">
+								<f:selectItem itemLabel=" -- Selecione -- " itemValue="" />
+								<f:selectItems value="#{usuarioController.listaEmpresa}" />
+							</p:selectOneMenu>
+   						
+							<h:panelGroup><h:outputLabel for="nome" value="Nome " /><h:outputText value="*" /></h:panelGroup>
+							<p:inputText id="nome" value="#{usuarioController.usuario.nome}" size="71" label="Nome" required="true" maxlength="100" />
+							
+							<h:panelGroup><h:outputLabel for="login" value="Login " /><h:outputText value="*" /></h:panelGroup>
+							<p:inputText id="login" value="#{usuarioController.usuario.login}" size="35" label="Login" required="true" maxlength="50" />
+							
+							<h:panelGroup><h:outputText for="senhaPassword" value="Senha " /><h:outputText value="*" /></h:panelGroup>
+            				<h:panelGroup>
+            					<p:password id="senhaPassword" value="#{usuarioController.usuario.senha}" feedback="true" promptLabel="Informe a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" redisplay="true" label="Senha" required="true" maxlength="50" />
+    							&nbsp;&nbsp;
+            					<h:panelGroup><h:outputText value="Confirme a Senha " /><h:outputText value="*" /></h:panelGroup> &nbsp;
+	           					<p:password id="confirmacaoSenhaPassword" value="#{usuarioController.confirmacaoSenha}" feedback="true" promptLabel="Confirme a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" redisplay="true" label="Confirme a senha" required="true" maxlength="50" />
+							</h:panelGroup>
+							
+   						</h:panelGrid>
+   					</p:tab>
+   					<p:tab title="Informações de Contato">
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+							<h:outputLabel for="fonePessoal" value="Telefone " />
+							<h:panelGroup>
+								&nbsp;<h:outputLabel for="fonePessoal" value="Pessoal " />&nbsp;
+								<p:inputMask id="fonePessoal" value="#{usuarioController.usuario.contato.fonePessoal}" size="15" mask="(99) 9999.9999" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="foneComercial" value="Comercial " />&nbsp;
+								<p:inputMask id="foneComercial" value="#{usuarioController.usuario.contato.foneComercial}" size="15" mask="(99) 9999.9999" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="foneCelular" value="Celular " />&nbsp;
+								<p:inputMask id="foneCelular" value="#{usuarioController.usuario.contato.foneCelular}" size="15" mask="(99) 9999.9999" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="foneOutros" value="Outros " />&nbsp;
+								<p:inputMask id="foneOutros" value="#{usuarioController.usuario.contato.foneOutros}" size="15" mask="(99) 9999.9999" maxlength="45" />
+							</h:panelGroup>
+							<h:outputLabel for="emailPrincipal" value="E-mail " />
+							<h:panelGroup>
+								<h:outputLabel for="emailPrincipal" value="Principal " />&nbsp;
+								<p:inputText id="emailPrincipal" value="#{usuarioController.usuario.contato.emailPrincipal}" size="35" maxlength="45" />
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<h:outputLabel for="emailSecundario" value="Secundário " />&nbsp;
+								<p:inputText id="emailSecundario" value="#{usuarioController.usuario.contato.emailSecundario}" size="35" maxlength="45" />
+							</h:panelGroup>
+   						</h:panelGrid>
+   					</p:tab>
+   					<p:tab title="Informações de Endereço">
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+   							<h:outputLabel for="endereco" value="Endereço " />
+   							<h:panelGroup>
+								<p:inputText id="endereco" value="#{usuarioController.rua}" size="70" maxlength="50" />
+								&nbsp;&nbsp;
+								<h:outputLabel for="numero" value="N° " />&nbsp;
+								<p:inputText id="numero" value="#{usuarioController.numero}" size="5" maxlength="10" />
+								&nbsp;&nbsp;
+							</h:panelGroup>
+							
+							<h:outputLabel for="complemento" value="Complemento " />
+							<h:panelGroup>
+								<p:inputText id="complemento" value="#{usuarioController.complemento}" size="70" maxlength="100" />
+								&nbsp;&nbsp;
+								<h:outputLabel for="bairro" value="Bairro " />&nbsp;
+								<p:inputText id="bairro" value="#{usuarioController.bairro}" maxlength="50" />
+							</h:panelGroup>
+							
+							<h:outputLabel for="cep" value="CEP " />
+							<p:inputMask id="cep" value="#{usuarioController.cep}" size="15" mask="99.999-999" maxlength="10" />
+
+							<h:outputLabel for="uf" value="UF: " />
+							<p:selectOneMenu id="uf" value="#{usuarioController.estado}" converter="estadoConverter">
+								<f:selectItem itemLabel=" -- Selecione -- " itemValue="" />    
+								<f:selectItems value="#{usuarioController.listaEstado}" />
+								<p:ajax update="cidade" listener="#{usuarioController.carregaCidadesPorEstado}" />
+							</p:selectOneMenu>
+							
+							<h:outputLabel for="cidade" value="Cidade: " />
+							<p:selectOneMenu id="cidade" value="#{usuarioController.cidade}" converter="cidadeConverter">
+								<f:selectItem itemLabel="" itemValue="" />
+								<f:selectItems value="#{usuarioController.listaCidade}" />
+							</p:selectOneMenu>	
+						</h:panelGrid>
+   					</p:tab>
+   					<p:tab title="Informações Adicionais">
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+   							<h:outputLabel for="dataNascimento" value="Data Nascimento: " />
+							<h:panelGroup>
+								<p:calendar id="dataNascimento" value="#{usuarioController.usuario.dataNascimento}" showOn="button" /> &nbsp;
+								<h:outputText value="dd/mm/aaaa" styleClass="textoExemplo" />
+							</h:panelGroup> 
+   						</h:panelGrid>
+   						
+   						<p:separator style="width: 100%; height: 5px" />
+   						
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+   							<h:outputLabel for="setor" value="Setor " />
+							<p:selectOneMenu id="setor" value="#{usuarioController.usuario.setor}" converter="setorConverter">
+								<f:selectItem itemLabel=" -- Selecione -- " itemValue="" />
+								<f:selectItems value="#{usuarioController.listaSetor}" />
+							</p:selectOneMenu>
+							
+							<h:outputLabel for="cargo" value="Cargo " />
+							<p:selectOneMenu id="cargo" value="#{usuarioController.usuario.cargo}" converter="cargoConverter">
+								<f:selectItem itemLabel=" -- Selecione -- " itemValue="" />
+								<f:selectItems value="#{usuarioController.listaCargo}" />
+							</p:selectOneMenu>
+			
+							<h:outputLabel for="dataAdmissao" value="Data Admissão: " />
+							<h:panelGroup>
+								<p:calendar id="dataAdmissao" value="#{usuarioController.usuario.dataAdmissao}" showOn="button" /> &nbsp;
+								<h:outputText value="dd/mm/aaaa" styleClass="textoExemplo" />
+							</h:panelGroup>
+   						</h:panelGrid>
+   					</p:tab>
+   				</p:accordionPanel>
+   				<h:panelGrid id="botoesEdicao" columns="2" cellspacing="10" cellpadding="10" width="100%" columnClasses="colunaBotoesEsquerda, colunaBotoesDireita">
+					<h:panelGroup>
+						<p:commandButton id="btSalvar" value="Salvar" action="#{usuarioController.salvar}" update="panel" ajax="false" icon="ui-icon-play" />&nbsp;&nbsp; 
+						<p:commandButton id="btSalvarPesquisar" value="Salvar e Pesquisar" action="#{usuarioController.salvarPesquisar}" update="panel" ajax="false" icon="ui-icon-seek-next" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:commandButton id="btLimpar" value="Limpar" update="panel" action="#{usuarioController.limparCadastro}" icon="ui-icon-arrow-1-w" />&nbsp;&nbsp;
+						<p:commandButton id="btCancelar" value="Cancelar" action="#{usuarioController.cancelar}" icon="ui-icon-stop" ajax="false" immediate="true" />
+					</h:panelGroup>
+				</h:panelGrid>
+			</p:panel>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

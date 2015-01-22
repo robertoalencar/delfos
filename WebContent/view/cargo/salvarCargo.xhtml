@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/template.xhtml">
+	<ui:define name="conteudo">
+		<h:form> 
+			<p:panel>
+				<h:outputText value="Cargo &nbsp; - &nbsp; Salvar" class="textoBreadCrumb" />
+			</p:panel>
+
+			<p:panel id="panel" header="Informe os campos abaixo para salvar o registro ( * Obrigatórios ): " style="margin-bottom:10px;">
+
+				<p:messages id="messages" />
+
+				<p:accordionPanel multiple="true" activeIndex="0">  
+   					<p:tab title="Informações Básicas">
+   						<h:panelGrid columns="2" cellpadding="10" columnClasses="colunaEsquerda, colunaDireita">
+							<h:panelGroup><h:outputLabel for="descricao" value="Descrição " /><h:outputText value="*" /></h:panelGroup>
+							<p:inputText id="descricao"  value="#{cargoController.cargo.descricao}" size="70" label="Descrição" required="true" maxlength="100" />
+   						</h:panelGrid>
+   					</p:tab>
+   				</p:accordionPanel>
+   				<h:panelGrid id="botoesEdicao" columns="2" cellspacing="10" cellpadding="10" width="100%" columnClasses="colunaBotoesEsquerda, colunaBotoesDireita">
+					<h:panelGroup>
+						<p:commandButton id="btSalvar" value="Salvar" action="#{cargoController.salvar}" update="panel" ajax="false" icon="ui-icon-play" /> &nbsp;&nbsp;
+						<p:commandButton id="btSalvarPesquisar" value="Salvar e Pesquisar" action="#{cargoController.salvarPesquisar}" update="panel" ajax="false" icon="ui-icon-seek-next" /> 
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:commandButton id="btLimpar" value="Limpar" update="panel" action="#{cargoController.limparCadastro}" icon="ui-icon-arrow-1-w" />&nbsp;&nbsp;
+						<p:commandButton id="btCancelar" value="Cancelar" action="#{cargoController.cancelar}" icon="ui-icon-stop" ajax="false" immediate="true" />
+					</h:panelGroup>
+				</h:panelGrid>
+			</p:panel>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>
